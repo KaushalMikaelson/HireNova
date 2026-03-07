@@ -1,0 +1,8 @@
+app/(main)/onboarding/_components/onboarding-form.tsx(29,29): error TS7006: Parameter 'values' implicitly has an 'any' type.
+app/(main)/onboarding/_components/onboarding-form.tsx(49,41): error TS2345: Argument of type 'Industry | undefined' is not assignable to parameter of type 'SetStateAction<string | null>'.
+  Type 'undefined' is not assignable to type 'SetStateAction<string | null>'.
+app/(main)/onboarding/_components/onboarding-form.tsx(83,60): error TS2339: Property 'subIndustries' does not exist on type 'string'.
+app/(main)/onboarding/_components/onboarding-form.tsx(83,79): error TS7006: Parameter 'ind' implicitly has an 'any' type.
+hooks/use-fetch.ts(5,19): error TS7006: Parameter 'cb' implicitly has an 'any' type.
+hooks/use-fetch.ts(10,23): error TS7019: Rest parameter 'args' implicitly has an 'any[]' type.
+hooks/use-fetch.ts(20,25): error TS18046: 'error' is of type 'unknown'.

@@ -10,6 +10,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import * as motion from "framer-motion/client";
 
 // Force HMR to clear cache
 export default function Home() {
@@ -24,20 +25,28 @@ export default function Home() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
             {features.map((feature, index) => {
-
               return (
-                <Card
+                <motion.div
                   key={index}
-                  className="border-2 hover:border-primary transition-colors duration-300 shadow-none bg-transparent"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
-                  <CardContent className="p-6 text-center flex flex-col items-center" >
-                    <div className="flex flex-col items-center justify-center">
-                      {feature.icon}
-                      <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                      <p className="text-muted-foreground">{feature.description}</p>
-                    </div>
-                  </CardContent>
-                </Card>
+                  <Card
+                    className="h-full border border-border/50 bg-background/50 backdrop-blur-sm hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300 group"
+                  >
+                    <CardContent className="p-6 text-center flex flex-col items-center h-full justify-center" >
+                      <div className="flex flex-col items-center justify-center">
+                        <div className="mb-4 p-3 rounded-2xl bg-primary/5 text-primary group-hover:bg-primary/10 group-hover:scale-110 transition-all duration-300">
+                          {feature.icon}
+                        </div>
+                        <h3 className="text-xl font-bold tracking-tight mb-2 text-foreground/90">{feature.title}</h3>
+                        <p className="text-muted-foreground/80 font-medium leading-relaxed">{feature.description}</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
               );
             })}
           </div>
@@ -47,32 +56,38 @@ export default function Home() {
 
       <section className="w-full py-20 md:py-24  bg-muted/50">
         <div className="container mx-auto px-4 md:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-            <div className="flex flex-col items-center justify-center space-y-2">
-              <h3 className="text-4xl font-bold ">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto"
+          >
+            <div className="flex flex-col items-center justify-center space-y-2 group">
+              <h3 className="text-4xl font-extrabold tracking-tight text-foreground drop-shadow-sm transition-transform duration-300 group-hover:scale-105">
                 50+
               </h3>
-              <p className="text-muted-foreground">Industries Covered</p>
+              <p className="text-muted-foreground/80 font-medium">Industries Covered</p>
             </div>
-            <div className="flex flex-col items-center justify-center space-y-2">
-              <h3 className="text-4xl font-bold ">
+            <div className="flex flex-col items-center justify-center space-y-2 group">
+              <h3 className="text-4xl font-extrabold tracking-tight text-foreground drop-shadow-sm transition-transform duration-300 group-hover:scale-105">
                 1000+
               </h3>
-              <p className="text-muted-foreground">Interview Questions</p>
+              <p className="text-muted-foreground/80 font-medium">Interview Questions</p>
             </div>
-            <div className="flex flex-col items-center justify-center space-y-2">
-              <h3 className="text-4xl font-bold ">
+            <div className="flex flex-col items-center justify-center space-y-2 group">
+              <h3 className="text-4xl font-extrabold tracking-tight text-foreground drop-shadow-sm transition-transform duration-300 group-hover:scale-105">
                 95%
               </h3>
-              <p className="text-muted-foreground">Success Rate</p>
+              <p className="text-muted-foreground/80 font-medium">Success Rate</p>
             </div>
-            <div className="flex flex-col items-center justify-center space-y-2">
-              <h3 className="text-4xl font-bold ">
+            <div className="flex flex-col items-center justify-center space-y-2 group">
+              <h3 className="text-4xl font-extrabold tracking-tight text-foreground drop-shadow-sm transition-transform duration-300 group-hover:scale-105">
                 24/7
               </h3>
-              <p className="text-muted-foreground">AI Support Available</p>
+              <p className="text-muted-foreground/80 font-medium">AI Support Available</p>
             </div>
-          </div>
+          </motion.div>
         </div>
 
       </section>
@@ -89,25 +104,29 @@ export default function Home() {
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 max-w-6xl mx-auto mt-12">
             {howItWorks.map((item, index) => (
-              <div
+              <motion.div
                 key={index}
-                className="flex flex-col items-center text-center space-y-4"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: index * 0.15 }}
+                className="flex flex-col items-center text-center space-y-5 group"
               >
                 {/* Icon Circle */}
-                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+                <div className="w-16 h-16 rounded-2xl bg-background border border-border shadow-sm flex items-center justify-center text-primary group-hover:border-primary/40 group-hover:shadow-md transition-all duration-300 group-hover:-translate-y-1">
                   {item.icon}
                 </div>
 
                 {/* Title */}
-                <h3 className="text-xl font-semibold">
+                <h3 className="text-xl font-bold tracking-tight text-foreground/90">
                   {item.title}
                 </h3>
 
                 {/* Description */}
-                <p className="text-muted-foreground">
+                <p className="text-muted-foreground/80 font-medium leading-relaxed">
                   {item.description}
                 </p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>

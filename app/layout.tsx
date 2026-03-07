@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/ui/theme-provider";
 import { Geist, Geist_Mono } from "next/font/google";
 import Header from "@/components/ui/header";
 import "./globals.css";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,6 +46,7 @@ export default function RootLayout({
             <main className="min-h-screen ">
               {children}
             </main>
+            <Toaster richColors/>
 
             {/* Footer */}
             <footer className="bg-muted/50 py-12">
