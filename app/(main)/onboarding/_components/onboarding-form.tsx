@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { onboardingSchema } from "@/app/lib/schema";
@@ -12,6 +12,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 
+import useFetch from "@/hooks/use-fetch";
+import { updateUser } from "@/actions/user";
+import { toast } from "sonner";
+import { LoaderCircle as Loader2 } from "lucide-react";
 type Industry = {
     id: string;
     name: string;
@@ -22,13 +26,42 @@ const OnboardingForm = ({ industries }: { industries: Industry[] }) => {
 
     const [selectedIndustry, setSelectedIndustry] = useState<Industry | null>(null);
     const router = useRouter();
+
+    const {
+        loading: updateLoading,
+        fn: updateUserFn,
+        data: updateResult,
+    } = useFetch(updateUser)
+
     const { register, handleSubmit, formState: { errors }, setValue, watch, } = useForm({
         resolver: zodResolver(onboardingSchema),
     })
 
     const onSubmit = async (values: any) => {
-        console.log(values);
+        try {
+            const formattedIndustry = `${values.industry}-${values.subIndustry
+                .toLowerCase()
+                .replace(/\s+/g, "-")}`;
+
+            await updateUserFn({
+                ...values,
+                industry: formattedIndustry,
+
+            })
+        } catch (error) {
+            console.log("Onboarding error:", error);
+        }
     }
+
+    useEffect(() => {
+        if (updateResult?.success && !updateLoading) {
+            toast.success("Profile updated successfully");
+            router.push("/dashboard");
+            router.refresh();
+        } else if (updateResult?.success === false && !updateLoading) {
+            toast.error(updateResult?.error || "Failed to update profile");
+        }
+    }, [updateResult, updateLoading, router])
 
     const watchIndustry = watch("industry");
     return (
@@ -39,16 +72,18 @@ const OnboardingForm = ({ industries }: { industries: Industry[] }) => {
                     <CardDescription>Select your industry to get personalized career insights and recommendations</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form className="space-y-6" onSubmit={handleSubmit(onSubmit)} >
+                    <form className="space-y-6" onSubmit={handleSubmit(onSubmit, (err) => console.log("FORM VALIDATION ERRORS:", err))} >
+                        <input type="hidden" {...register("industry")} />
+                        <input type="hidden" {...register("subIndustry")} />
                         <div className="space-y-2">
                             <Label htmlFor="industry">Industry</Label>
                             <Select
                                 onValueChange={(value) => {
-                                    setValue("industry", value);
+                                    setValue("industry", value, { shouldValidate: true });
                                     setSelectedIndustry(
                                         industries.find((ind) => ind.id === value) || null
                                     );
-                                    setValue("subIndustry", "");
+                                    setValue("subIndustry", "", { shouldValidate: true });
                                 }}
                             >
                                 <SelectTrigger id="industry">
@@ -64,7 +99,7 @@ const OnboardingForm = ({ industries }: { industries: Industry[] }) => {
                                 </SelectContent>
                             </Select>
                             {errors.industry && (
-                                <p className="text-red-500 text-sm">{errors.industry.message}</p>
+                                <p className="text-red-500 text-sm">{errors.industry.message as string}</p>
                             )}
                         </div>
 
@@ -73,7 +108,7 @@ const OnboardingForm = ({ industries }: { industries: Industry[] }) => {
                                 <Label htmlFor="subIndustry">Specialization</Label>
                                 <Select
                                     onValueChange={(value) => {
-                                        setValue("industry", value);
+                                        setValue("subIndustry", value, { shouldValidate: true });
                                     }}
                                 >
                                     <SelectTrigger id="subIndustry">
@@ -91,7 +126,7 @@ const OnboardingForm = ({ industries }: { industries: Industry[] }) => {
                                     </SelectContent>
                                 </Select>
                                 {errors.subIndustry && (
-                                    <p className="text-red-500 text-sm">{errors.subIndustry.message}</p>
+                                    <p className="text-red-500 text-sm">{errors.subIndustry.message as string}</p>
                                 )}
                             </div>
                         )}
@@ -107,7 +142,7 @@ const OnboardingForm = ({ industries }: { industries: Industry[] }) => {
                                 {...register("experience")}
                             />
                             {errors.experience && (
-                                <p className="text-red-500 text-sm">{errors.experience.message}</p>
+                                <p className="text-red-500 text-sm">{errors.experience.message as string}</p>
                             )}
                         </div>
 
@@ -122,7 +157,7 @@ const OnboardingForm = ({ industries }: { industries: Industry[] }) => {
                                 Enter your skills separated by commas
                             </p>
                             {errors.skills && (
-                                <p className="text-red-500 text-sm">{errors.skills.message}</p>
+                                <p className="text-red-500 text-sm">{errors.skills.message as string}</p>
                             )}
                         </div>
 
@@ -136,12 +171,19 @@ const OnboardingForm = ({ industries }: { industries: Industry[] }) => {
                             />
 
                             {errors.bio && (
-                                <p className="text-red-500 text-sm">{errors.bio.message}</p>
+                                <p className="text-red-500 text-sm">{errors.bio.message as string}</p>
                             )}
                         </div>
 
-                        <Button type="submit" className="w-full">
-                            Complete Profile
+                        <Button type="submit" className="w-full" disabled={!!updateLoading}>
+                            {updateLoading ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Completing Profile...
+                                </>
+                            ) : (
+                                "Complete Profile"
+                            )}
                         </Button>
                     </form>
                 </CardContent>

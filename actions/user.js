@@ -1,7 +1,7 @@
 "use server";
 
 import { auth } from "@clerk/nextjs/server";
-import {db} from "@/lib/prisma"
+import { db } from "@/lib/prisma"
 
 export async function updateUser(data) {
     const { userId } = await auth();
@@ -17,21 +17,20 @@ export async function updateUser(data) {
         //find if the industry exists
         const result = await db.$transaction(
             async (tx) => {
-                let industryInsight = await tx.industryInsights.findUnique({
+                let industryInsight = await tx.industryInsight.findUnique({
                     where: { industry: data.industry },
                 });
 
                 if (!industryInsight) {
-                    industryInsight = await tx.industryInsights.create({
+                    industryInsight = await tx.industryInsight.create({
                         data: {
                             industry: data.industry,
                             salaryRanges: [],
                             growthRate: 0,
-                            demandLevel: "Medium",
+                            demandLevel: "MEDIUM",
                             topSkills: [],
-                            marketOutlook: "Neutral",
+                            marketOutlook: "NEUTRAL",
                             keyTrends: [],
-                            recommendedSkills: [],
                             nextUpdate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), //1 week from now
                         },
                     });
@@ -42,7 +41,7 @@ export async function updateUser(data) {
                     where: { id: user.id },
                     data: {
                         industry: data.industry,
-                        experience: data.experience,
+                        experience: data.experience?.toString(),
                         bio: data.bio,
                         skills: data.skills,
                     },
@@ -53,10 +52,10 @@ export async function updateUser(data) {
             }, {
             timeout: 10000,
         });
-        return result.user;
+        return { success: true, ...result };
     } catch (error) {
         console.error("Error updating user and industry:", error.message);
-        throw new Error("Failed to update profile");
+        return { success: false, error: error.message };
     }
 }
 
