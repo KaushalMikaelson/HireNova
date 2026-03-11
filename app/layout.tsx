@@ -49,10 +49,10 @@ export default function RootLayout({
             <Toaster richColors/>
 
             {/* Footer */}
-            <footer className="bg-muted/50 py-12">
-              <div className="container mx-auto px-4 text-center text-gray-500">
-                <p>
-                  Made by <span className="text-primary">Kaushal</span>
+            <footer className="bg-muted/50 py-12 border-t border-border/50">
+              <div className="container mx-auto px-4 text-center text-muted-foreground">
+                <p className="text-sm font-medium tracking-wide">
+                  Built by <span className="text-primary font-bold">Kaushal</span>
                 </p>
               </div>
             </footer>

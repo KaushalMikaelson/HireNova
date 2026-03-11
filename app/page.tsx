@@ -20,8 +20,8 @@ export default function Home() {
       <HeroSection />
       <section className="w-full py-20 md:py-24 lg:py-32 bg-background">
         <div className="container mx-auto px-4 md:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center md:text-4xl lg:text-5xl xl:text-6xl gradient-title">
-            Powerful features for Your Carrer Growth
+          <h2 className="text-3xl font-bold text-center md:text-4xl lg:text-5xl xl:text-6xl gradient-title mb-8">
+            Powerful Features for Your Career Growth
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
             {features.map((feature, index) => {
@@ -61,31 +61,31 @@ export default function Home() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto"
           >
-            <div className="flex flex-col items-center justify-center space-y-2 group">
-              <h3 className="text-4xl font-extrabold tracking-tight text-foreground drop-shadow-sm transition-transform duration-300 group-hover:scale-105">
+            <div className="flex flex-col items-center justify-center space-y-3 group bg-background/30 backdrop-blur-sm p-6 rounded-2xl border border-border/30 hover:border-primary/30 transition-all duration-300 hover:shadow-lg">
+              <h3 className="text-5xl font-extrabold tracking-tighter gradient-title transition-transform duration-300 group-hover:scale-110">
                 50+
               </h3>
-              <p className="text-muted-foreground/80 font-medium">Industries Covered</p>
+              <p className="text-muted-foreground font-medium text-lg">Industries Covered</p>
             </div>
-            <div className="flex flex-col items-center justify-center space-y-2 group">
-              <h3 className="text-4xl font-extrabold tracking-tight text-foreground drop-shadow-sm transition-transform duration-300 group-hover:scale-105">
+            <div className="flex flex-col items-center justify-center space-y-3 group bg-background/30 backdrop-blur-sm p-6 rounded-2xl border border-border/30 hover:border-primary/30 transition-all duration-300 hover:shadow-lg">
+              <h3 className="text-5xl font-extrabold tracking-tighter gradient-title transition-transform duration-300 group-hover:scale-110">
                 1000+
               </h3>
-              <p className="text-muted-foreground/80 font-medium">Interview Questions</p>
+              <p className="text-muted-foreground font-medium text-lg">Interview Questions</p>
             </div>
-            <div className="flex flex-col items-center justify-center space-y-2 group">
-              <h3 className="text-4xl font-extrabold tracking-tight text-foreground drop-shadow-sm transition-transform duration-300 group-hover:scale-105">
+            <div className="flex flex-col items-center justify-center space-y-3 group bg-background/30 backdrop-blur-sm p-6 rounded-2xl border border-border/30 hover:border-primary/30 transition-all duration-300 hover:shadow-lg">
+              <h3 className="text-5xl font-extrabold tracking-tighter gradient-title transition-transform duration-300 group-hover:scale-110">
                 95%
               </h3>
-              <p className="text-muted-foreground/80 font-medium">Success Rate</p>
+              <p className="text-muted-foreground font-medium text-lg">Success Rate</p>
             </div>
-            <div className="flex flex-col items-center justify-center space-y-2 group">
-              <h3 className="text-4xl font-extrabold tracking-tight text-foreground drop-shadow-sm transition-transform duration-300 group-hover:scale-105">
+            <div className="flex flex-col items-center justify-center space-y-3 group bg-background/30 backdrop-blur-sm p-6 rounded-2xl border border-border/30 hover:border-primary/30 transition-all duration-300 hover:shadow-lg">
+              <h3 className="text-5xl font-extrabold tracking-tighter gradient-title transition-transform duration-300 group-hover:scale-110">
                 24/7
               </h3>
-              <p className="text-muted-foreground/80 font-medium">AI Support Available</p>
+              <p className="text-muted-foreground font-medium text-lg">AI Support Available</p>
             </div>
           </motion.div>
         </div>
@@ -94,9 +94,9 @@ export default function Home() {
 
       <section className="w-full py-20 md:py-24 lg:py-32 bg-background">
         <div className="container mx-auto px-4 md:px-6 lg:px-8">
-          <div>
-            <h2 className="text-3xl font-bold text-center md:text-4xl lg:text-5xl xl:text-6xl gradient-title">
-              How it Works
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold md:text-4xl lg:text-5xl xl:text-6xl gradient-title">
+              How It Works
             </h2>
           </div>
           <p className="text-center text-muted-foreground">
@@ -139,29 +139,29 @@ export default function Home() {
             What Our Users Say
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {testimonial.map((testimonial, index) => {
+            {testimonial.map((t, index) => {
 
               return (
                 <Card
                   key={index}
-                  className="bg-background"
+                  className="bg-background/50 backdrop-blur-sm border-border/50 shadow-lg hover:-translate-y-1 transition-transform duration-300"
                 >
                   <CardContent className="p-6 text-center flex flex-col items-center" >
                     <div className="flex flex-col space-y-4">
                       <div className="flex items-center space-x-2">
                         <div className="relative h-12 w-12 flex-shrink-0">
                           <Image
-                            src={testimonial.image}
-                            alt={testimonial.author}
+                            src={t.image}
+                            alt={t.author}
                             width={40}
                             height={40}
                             className="rounded-full object-cover border-2 border-primary/20"
                           />
                         </div>
                         <div>
-                          <p className=" font-semibold">{testimonial.author}</p>
-                          <p className="text-muted-foreground">{testimonial.role}</p>
-                          <p className="text-sm text-muted-foreground">{testimonial.company}</p>
+                          <p className=" font-semibold">{t.author}</p>
+                          <p className="text-muted-foreground">{t.role}</p>
+                          <p className="text-sm text-muted-foreground">{t.company}</p>
                         </div>
                       </div>
                       <div>
@@ -170,7 +170,7 @@ export default function Home() {
                             <span className="text-3xl text-primary absolute -top-4 -left-2">
                               &quot;
                             </span>
-                            {testimonial.quote}</p>
+                            {t.quote}</p>
 
                         </blockquote>
                       </div>
@@ -223,8 +223,9 @@ export default function Home() {
               Join thousands of professionals who have transformed their careers with HireNova.
             </p>
             <Link href="/dashboard" passHref>
-              <Button size="lg" variant="secondary" className=" h-11 mt-5 animate-bounce ">
-                Start Your Journey Today <ArrowRight className="ml-2 h-5 w-5" />
+              <Button size="lg" variant="secondary" className="h-11 mt-5 group hover:bg-white hover:text-black transition-all duration-300 px-8 rounded-full font-semibold shadow-xl">
+                Start Your Journey Today{" "}
+                <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
               </Button>
             </Link>
 

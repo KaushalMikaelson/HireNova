@@ -10,9 +10,9 @@ import { checkUser } from "@/lib/checkUser";
 const Header = async () => {
   await checkUser();
   return (
-    <header className="fixed top-0 w-full border-b bg-background/80 backdrop-blur-md z-50 supports-[backdrop-filter]:bg-background/60">
+    <header className="fixed top-0 w-full border-b border-border/50 bg-background/40 backdrop-blur-2xl z-50 supports-[backdrop-filter]:bg-background/20 transition-all duration-300">
   
-  <nav className="container mx-auto px-3 h-16 flex items-center justify-between">
+  <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
 
     {/* LEFT SIDE */}
     <Link href="/" className="flex items-center">
