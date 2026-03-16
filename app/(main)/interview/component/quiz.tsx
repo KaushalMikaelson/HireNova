@@ -168,7 +168,7 @@ const Quiz = () => {
                     className="ml-auto" 
                     onClick={handleNext}
                     variant="outline"
-                    disabled={!answers[currentQuestion] || savingResult}
+                    disabled={!answers[currentQuestion] || !!savingResult}
                     >
                         {savingResult  && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                        {currentQuestion === quizData.length - 1 ? "Submit" : "Next Question"}
