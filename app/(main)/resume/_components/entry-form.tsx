@@ -5,8 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { entrySchema } from "@/app/lib/schema";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { Loader2, PlusCircle, Sparkles, X } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Briefcase, Calendar, Loader2, PlusCircle, Sparkles, Trash2, X } from "lucide-react";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,6 +14,14 @@ import { Textarea } from "@/components/ui/textarea";
 import useFetch from "@/hooks/use-fetch";
 import { toast } from "sonner";
 import { improveWithAI } from "@/actions/resume";
+import { format, parse } from "date-fns";
+
+
+const formatDisplayDate = (dateString) => {
+    if(!dateString) return "";
+    const date = parse(dateString, "yyyy-MM", new Date());
+    return format(date, "yyyy-MM");
+}
 
 const EntryForm = ({ type, entries, onChange }: { type: string; entries: any[]; onChange: (entries: any[]) => void }) => {
 
@@ -49,13 +57,23 @@ const EntryForm = ({ type, entries, onChange }: { type: string; entries: any[]; 
     } =  useFetch(improveWithAI);
 
 
-    const handleDelete = () => {
-
+    const handleDelete = (index) => {
+        const newEntries = entries.filter((_, i) => i !== index);
+        onChange(newEntries);
     }
 
-    const handleAdd = () => {
+    const handleAdd = handleValidation((data) => {
+        const formattedEntry = {
+            ...data,
+            startDate: formatDisplayDate(data.startDate),
+            endDate: formatDisplayDate(data.endDate),
+        }
 
-    } 
+        onChange([...entries, formattedEntry]);
+        reset();
+        setIsAdding(false);
+        
+    }) 
 
     useEffect(() => {
         if(improvedContent  && !isImproving){
@@ -80,6 +98,57 @@ const EntryForm = ({ type, entries, onChange }: { type: string; entries: any[]; 
     }
         return (
         <div className="space-y-4">
+            <div className="space-y-3">
+                {entries.map((item, index) => {
+                    return(
+                        <Card
+                            key={index}
+                            className="group border border-border/50 shadow-sm hover:shadow-md transition-all duration-200"
+                        >
+                            <CardHeader className="flex flex-row items-start justify-between gap-4 pb-2">
+                                <div className="flex-1 min-w-0">
+                                    <CardTitle className="text-sm font-semibold tracking-tight truncate">
+                                        {item.title}
+                                    </CardTitle>
+                                    <p className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1.5">
+                                        <Briefcase className="h-3 w-3 shrink-0" />
+                                        <span className="truncate">{item.organization}</span>
+                                    </p>
+                                </div>
+                                <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-8 w-8 shrink-0 rounded-full text-muted-foreground opacity-0 group-hover:opacity-100 hover:text-destructive hover:bg-destructive/10 transition-all duration-200"
+                                    onClick={() => {
+                                        handleDelete(index);
+                                    }}
+                                >
+                                    <Trash2 className="h-3.5 w-3.5" />
+                                </Button>
+                            </CardHeader>
+                            <CardContent className="pt-0 space-y-2">
+                                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                                    <Calendar className="h-3 w-3 shrink-0" />
+                                    <span className="font-medium">
+                                        {item.current
+                                            ? `${item.startDate} — Present`
+                                            : `${item.startDate} — ${item.endDate}`}
+                                    </span>
+                                    {item.current && (
+                                        <span className="ml-1 inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
+                                            Current
+                                        </span>
+                                    )}
+                                </div>
+                                <p className="text-sm text-muted-foreground/80 leading-relaxed line-clamp-2">
+                                    {item.description}
+                                </p>
+                            </CardContent>
+                        </Card>
+                    )
+                })}
+            </div>
             {isAdding && (
                 <Card className="border border-border/60 shadow-md bg-card/80 backdrop-blur-sm transition-all duration-300">
                     <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -235,6 +304,27 @@ const EntryForm = ({ type, entries, onChange }: { type: string; entries: any[]; 
                             </Button>
                         </div>
                     </CardContent>
+                    <CardFooter className="flex justify-end gap-2 border-t border-border/40 pt-4">
+                        <Button    
+                            type="button"
+                            variant="ghost"
+                            className="text-muted-foreground hover:text-foreground transition-colors"
+                            onClick={() => {
+                                reset();
+                                setIsAdding(false);
+                            }}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            type="button"
+                            onClick={handleAdd}
+                            className="gap-2 shadow-sm hover:shadow-md transition-shadow"
+                        >
+                            <PlusCircle className="h-4 w-4" />
+                            Add Entry
+                        </Button>
+                    </CardFooter>
                 </Card>
             )}
             {!isAdding && (

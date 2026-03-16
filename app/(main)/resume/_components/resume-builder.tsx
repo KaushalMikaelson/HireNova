@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Download, Save } from "lucide-react";
+import { AlertTriangle, Download, Loader2, Save, User } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -14,11 +14,20 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import EntryForm from "./entry-form";
+import { Edit } from "lucide-react";
+import { Monitor } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
+import htmlToPdf from "html2pdf.js/dist/html2pdf.min.js";
+import { toast } from "sonner";
 
 
 const ResumeBuilder = ({ initialContent }: { initialContent: string }) => {
 
     const [activeTab, setActiveTab] = useState("edit");
+    const [resumeMode, setResumeMode] = useState("preview");
+    const [previewContent, setPreviewContent] = useState(initialContent);
+    const {user} = useUser();
+    const [isGenerating, setIsGenerating] = useState(false);
 
     const {
         control,
@@ -52,7 +61,86 @@ const ResumeBuilder = ({ initialContent }: { initialContent: string }) => {
         if (initialContent) setActiveTab("preview");
     }, [initialContent]);
 
+    useEffect(() =>{
+        if(activeTab === "edit"){
+            const newContent = getCombinedContent();
+            setPreviewContent(newContent ? newContent : initialContent);
+        }
+    }, [formValues, activeTab]);
+
+    const getContactMarkdown = () => {
+        const { contactInfo } = formValues;
+        const parts = [];
+        if(contactInfo.email){
+            parts.push(`Email: ${contactInfo.email}`);
+        }
+        if(contactInfo.mobile){
+            parts.push(`Mobile: ${contactInfo.mobile}`);
+        }
+        if(contactInfo.linkedin){
+            parts.push(`LinkedIn: ${contactInfo.linkedin}`);
+        }
+        if(contactInfo.github){
+            parts.push(`GitHub: ${contactInfo.github}`);
+        }
+        return parts.length > 0 ? 
+        `## <div align="center"> ${user.fullName}</div>
+        \n\n<div align="center"> ${parts.join("\n")}</div>`: "";
+    }
+
+    const getCombinedContent = () => {
+        const { summary,skills, experience,education, projects} = formValues;
+
+        return [
+            getContactMarkdown(),
+            summary && `## Proffessional Summary\n\n${summary}`,
+            skills && `## Skills\n\n${skills}`,
+            experience && `## Experience\n\n${experience}`,
+            education && `## Education\n\n${education}`,
+            projects && `## Projects\n\n${projects}`,
+        ]
+        .filter(Boolean)
+        .join("\n\n");
+    }
+
+    useEffect(()=>{
+        if(saveResult  && !isSaving){
+            toast.success("Resume saved successfully");
+        }
+        if(saveError){
+            toast.error("Failed to save resume");
+        }
+    }, [saveResult, saveError, isSaving]);
     const onSubmit = async (data: z.input<typeof resumeSchema>) => {
+        try{
+            await saveResumeFn(previewContent);
+            
+        }catch(error){
+            console.error("Error saving resume:", error);
+        }
+    }
+
+    const generatePDF = async () => {
+        setIsGenerating(true);
+        try{
+            const element = document.getElementById("resume-pdf");
+            if(!element) return;
+
+            const opt = {
+                margin: [15, 15],
+                filename: "resume.pdf",
+                image: {type: "jpeg", quality: 0.98},
+                html2canvas: {scale: 2},
+                jsPDF: {unit: "mm", format: "a4", orientation: "portrait"}
+            }
+
+            await html2pdf().set(opt).from(element).save();
+            
+        }catch(error){
+            console.error("Error generating PDF:", error);
+        }finally{
+            setIsGenerating(false);
+        }
         
     }
 
@@ -70,13 +158,37 @@ const ResumeBuilder = ({ initialContent }: { initialContent: string }) => {
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <Button variant="outline" className="gap-2 shadow-sm hover:shadow transition-shadow">
-                        <Save className="h-4 w-4" />
-                        Save
+                    <Button variant="outline" className="gap-2 shadow-sm hover:shadow transition-shadow"
+                    onClick={onSubmit}
+                    disabled={isSaving}
+                    >
+                        {isSaving ? (
+                            <>
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            Saving...
+                            </>
+                        ) : (
+                            <>
+                            <Save className="h-4 w-4" />
+                            Save
+                            </>
+                        )}
                     </Button>
-                    <Button className="gap-2 shadow-sm hover:shadow-md transition-shadow">
-                        <Download className="h-4 w-4" />
-                        Download PDF
+                    <Button className="gap-2 shadow-sm hover:shadow-md transition-shadow"
+                    onClick={generatePDF}
+                    disabled={isGenerating}
+                    >
+                        {isGenerating ? (
+                            <>
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            Generating PDF...
+                            </>
+                        ) : (
+                            <>
+                            <Download className="h-4 w-4" />
+                            Download PDF
+                            </>
+                        )}
                     </Button>
                 </div>
             </div>
@@ -310,8 +422,52 @@ const ResumeBuilder = ({ initialContent }: { initialContent: string }) => {
                 </TabsContent>
 
                 <TabsContent value="preview">
-                    <div className="min-h-[400px] rounded-lg border border-border/50 bg-card/50 p-6 text-muted-foreground text-sm">
-                        Markdown preview will appear here...
+                    <Button variant="link" type="button" className="mb-2"
+                    onClick={() => setResumeMode(resumeMode === "preview" ? "edit" : "preview")}
+                    >
+                        {resumeMode === "preview" ? (
+                            <>
+                            <Edit className="h-4 w-4 mr-2" />
+                            Edit Resume
+                            </>
+
+                        ) : (
+                            <>
+                            <Monitor className="h-4 w-4 mr-2" />
+                            Preview Resume
+                            </>
+                        )}
+                    </Button>
+
+                    {resumeMode != "preview" && (
+                        <div className="flex p -3 gap-2 items-center border-2 ">
+                            <AlertTriangle className="h-4 w-4 mr-2" />
+                            <span className="text-muted-foreground text-xs mt-0.5">
+                                You will lose edited markdown if you switch to preview mode.
+                            </span>
+                        </div>
+                    )}
+
+                    <div className="border-t border-border/50 pt-2">
+                        <MDEditor
+                            value={previewContent}
+                            onChange={setPreviewContent}
+                            height={800}
+                            preview={resumeMode}
+                            />
+                    </div>
+
+                    <div className="hidden" >
+                    <div id="resume-pdf">
+                        <MDEditor.Markdown
+                            source={previewContent}
+                            style={{
+                                background: "white",
+                                color: "black",
+                            }}
+                            />
+                    </div>
+
                     </div>
                 </TabsContent>
             </Tabs>
