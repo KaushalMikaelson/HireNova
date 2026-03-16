@@ -107,7 +107,7 @@ const Quiz = () => {
                     </p>
                 </CardContent>
                 <CardFooter>
-                    <Button className="w-full" onClick={generateQuizFn} disabled={generatingQuiz} >
+                    <Button className="w-full" onClick={generateQuizFn} disabled={!!generatingQuiz} >
                         {generatingQuiz ? "Generating..." : "Start Quiz"}
                     </Button>
                 </CardFooter>

@@ -1,5 +1,7 @@
 import { getAssessments } from "@/actions/interview";
-
+import StatsCards from "./component/stats-cards";
+import PerformanceChart from "./component/performance-chart";
+import QuizList from "./component/quiz-list";
 const InterviewPage = async () => {
 
     const assessments = await getAssessments();
@@ -9,7 +11,7 @@ const InterviewPage = async () => {
                 Interview Preparation
             </h1>
 
-            <div>
+            <div className="space-y-6">
                 <StatsCards assessments={assessments} />
                 <PerformanceChart assessments={assessments} />
                 <QuizList assessments={assessments} />
