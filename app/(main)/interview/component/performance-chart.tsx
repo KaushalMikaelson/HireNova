@@ -20,7 +20,7 @@ const PerformanceChart = ({ assessments }: { assessments: any[] }) => {
         }
     }, [assessments]);
     return (
-        <Card>
+        <Card className="border-muted-foreground/20 hover:shadow-md transition-all ease-in-out">
             <CardHeader>
                 <CardTitle className="gradient-title text-3xl md:text-4xl">Performance Chart</CardTitle>
                 <CardDescription>
