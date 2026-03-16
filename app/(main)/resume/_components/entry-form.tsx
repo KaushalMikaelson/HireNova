@@ -17,7 +17,7 @@ import { improveWithAI } from "@/actions/resume";
 import { format, parse } from "date-fns";
 
 
-const formatDisplayDate = (dateString) => {
+const formatDisplayDate = (dateString: string | undefined) => {
     if(!dateString) return "";
     const date = parse(dateString, "yyyy-MM", new Date());
     return format(date, "yyyy-MM");
@@ -57,7 +57,7 @@ const EntryForm = ({ type, entries, onChange }: { type: string; entries: any[]; 
     } =  useFetch(improveWithAI);
 
 
-    const handleDelete = (index) => {
+    const handleDelete = (index: number) => {
         const newEntries = entries.filter((_, i) => i !== index);
         onChange(newEntries);
     }

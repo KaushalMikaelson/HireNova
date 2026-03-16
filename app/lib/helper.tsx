@@ -1,4 +1,4 @@
-export function entriesToMarkdown(entries, type){
+export function entriesToMarkdown(entries: any[], type: string){
     if(!entries || entries.length === 0) return "";
 
     return (

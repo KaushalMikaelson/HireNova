@@ -17,14 +17,16 @@ import EntryForm from "./entry-form";
 import { Edit } from "lucide-react";
 import { Monitor } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
-import htmlToPdf from "html2pdf.js/dist/html2pdf.min.js";
+import html2pdf from "html2pdf.js/dist/html2pdf.min.js";
 import { toast } from "sonner";
+import MDEditor from "@uiw/react-md-editor";
+import { entriesToMarkdown } from "@/app/lib/helper";
 
 
 const ResumeBuilder = ({ initialContent }: { initialContent: string }) => {
 
     const [activeTab, setActiveTab] = useState("edit");
-    const [resumeMode, setResumeMode] = useState("preview");
+    const [resumeMode, setResumeMode] = useState<"preview" | "edit">("preview");
     const [previewContent, setPreviewContent] = useState(initialContent);
     const {user} = useUser();
     const [isGenerating, setIsGenerating] = useState(false);
@@ -84,20 +86,20 @@ const ResumeBuilder = ({ initialContent }: { initialContent: string }) => {
             parts.push(`GitHub: ${contactInfo.github}`);
         }
         return parts.length > 0 ? 
-        `## <div align="center"> ${user.fullName}</div>
+        `## <div align="center"> ${user?.fullName || ""}</div>
         \n\n<div align="center"> ${parts.join("\n")}</div>`: "";
     }
 
     const getCombinedContent = () => {
-        const { summary,skills, experience,education, projects} = formValues;
+        const { summary, skills, experience, education, projects } = formValues;
 
         return [
             getContactMarkdown(),
-            summary && `## Proffessional Summary\n\n${summary}`,
+            summary && `## Professional Summary\n\n${summary}`,
             skills && `## Skills\n\n${skills}`,
-            experience && `## Experience\n\n${experience}`,
-            education && `## Education\n\n${education}`,
-            projects && `## Projects\n\n${projects}`,
+            entriesToMarkdown(experience, "Work Experience"),
+            entriesToMarkdown(education, "Education"),
+            entriesToMarkdown(projects, "Projects"),
         ]
         .filter(Boolean)
         .join("\n\n");
@@ -159,8 +161,8 @@ const ResumeBuilder = ({ initialContent }: { initialContent: string }) => {
 
                 <div className="flex items-center gap-2">
                     <Button variant="outline" className="gap-2 shadow-sm hover:shadow transition-shadow"
-                    onClick={onSubmit}
-                    disabled={isSaving}
+                    onClick={handleSubmit(onSubmit)}
+                    disabled={!!isSaving}
                     >
                         {isSaving ? (
                             <>
@@ -451,7 +453,7 @@ const ResumeBuilder = ({ initialContent }: { initialContent: string }) => {
                     <div className="border-t border-border/50 pt-2">
                         <MDEditor
                             value={previewContent}
-                            onChange={setPreviewContent}
+                            onChange={(val) => setPreviewContent(val || "")}
                             height={800}
                             preview={resumeMode}
                             />
