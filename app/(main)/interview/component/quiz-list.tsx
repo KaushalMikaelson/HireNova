@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { i } from "framer-motion/client";
 import { useRouter } from "next/navigation"
 import { format } from "date-fns";
 import { useState } from "react"
@@ -68,8 +67,7 @@ const QuizList = ({ assessments }: { assessments: any[] }) => {
                 
                 <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
-                        <DialogTitle></DialogTitle>
-                        
+                        <DialogTitle className="sr-only">Quiz Result</DialogTitle>
                     </DialogHeader>
                     <QuizResult
                         result={selectedQuiz}

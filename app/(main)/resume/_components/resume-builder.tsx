@@ -17,7 +17,6 @@ import EntryForm from "./entry-form";
 import { Edit } from "lucide-react";
 import { Monitor } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
-import html2pdf from "html2pdf.js/dist/html2pdf.min.js";
 import { toast } from "sonner";
 import MDEditor from "@uiw/react-md-editor";
 import { entriesToMarkdown } from "@/app/lib/helper";
@@ -136,6 +135,7 @@ const ResumeBuilder = ({ initialContent }: { initialContent: string }) => {
                 jsPDF: {unit: "mm", format: "a4", orientation: "portrait"}
             }
 
+            const html2pdf = (await import("html2pdf.js/dist/html2pdf.min.js")).default;
             await html2pdf().set(opt).from(element).save();
             
         }catch(error){

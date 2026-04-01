@@ -1,0 +1,100 @@
+﻿
+E:\Projects\HireNova\actions\resume.tsx
+  114:20  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\Projects\HireNova\app\(main)\dashboard\_components\dashboard-view.tsx
+  12:50  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  13:58  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\Projects\HireNova\app\(main)\interview\component\performance-chart.tsx
+   9:59  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             @typescript-eslint/no-explicit-any
+  19:13  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+E:\Projects\HireNova\app\(main)\interview\component\performance-chart.tsx:19:13
+  17 |                 score: assessment.quizScore
+  18 |             }));
+> 19 |             setChartData(formattedData);
+     |             ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  20 |         }
+  21 |     }, [assessments]);
+  22 |     return (  react-hooks/set-state-in-effect
+
+E:\Projects\HireNova\app\(main)\interview\component\quiz-list.tsx
+   5:10  warning  'i' is defined but never used             @typescript-eslint/no-unused-vars
+  13:51  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\Projects\HireNova\app\(main)\interview\component\quiz-result.tsx
+   2:9   warning  'Card' is defined but never used          @typescript-eslint/no-unused-vars
+   2:40  warning  'CardHeader' is defined but never used    @typescript-eslint/no-unused-vars
+   2:52  warning  'CardTitle' is defined but never used     @typescript-eslint/no-unused-vars
+   6:77  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  34:46  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\Projects\HireNova\app\(main)\interview\component\quiz.tsx
+  72:16  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+E:\Projects\HireNova\app\(main)\interview\component\stats-cards.tsx
+  4:53  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\Projects\HireNova\app\(main)\onboarding\_components\onboarding-form.tsx
+   8:46  warning  'CardFooter' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             @typescript-eslint/no-unused-vars
+   9:33  warning  'SelectGroup' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @typescript-eslint/no-unused-vars
+  40:37  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           @typescript-eslint/no-explicit-any
+  66:27  warning  Compilation Skipped: Use of incompatible library
+
+This API returns functions which cannot be memoized without leading to stale UI. To prevent this, by default React Compiler will skip memoizing this component/hook. However, you may see issues if values from this API are passed to other components/hooks that are memoized.
+
+E:\Projects\HireNova\app\(main)\onboarding\_components\onboarding-form.tsx:66:27
+  64 |     }, [updateResult, updateLoading, router])
+  65 |
+> 66 |     const watchIndustry = watch("industry");
+     |                           ^^^^^ React Hook Form's `useForm()` API returns a `watch()` function which cannot be memoized safely.
+  67 |     return (
+  68 |         <div className="flex  justify-center items-center bg-background">
+  69 |             <Card className="w-full max-w-lg mt-10 mx-2">  react-hooks/incompatible-library
+
+E:\Projects\HireNova\app\(main)\resume\_components\entry-form.tsx
+  26:74   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  26:101  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  86:8    warning  React Hook useEffect has a missing dependency: 'setValue'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                react-hooks/exhaustive-deps
+  89:29   warning  Compilation Skipped: Use of incompatible library
+
+This API returns functions which cannot be memoized without leading to stale UI. To prevent this, by default React Compiler will skip memoizing this component/hook. However, you may see issues if values from this API are passed to other components/hooks that are memoized.
+
+E:\Projects\HireNova\app\(main)\resume\_components\entry-form.tsx:89:29
+  87 |
+  88 |     const handleImproveDescription = async () => {
+> 89 |         const description = watch("description");
+     |                             ^^^^^ React Hook Form's `useForm()` API returns a `watch()` function which cannot be memoized safely.
+  90 |         if(!description) {
+  91 |             toast.error("Please enter a description");
+  92 |             return;  react-hooks/incompatible-library
+
+E:\Projects\HireNova\app\(main)\resume\_components\resume-builder.tsx
+    4:50  warning  'User' is defined but never used                                                                                                                                                                                                                                                                                  @typescript-eslint/no-unused-vars
+   71:8   warning  React Hook useEffect has missing dependencies: 'getCombinedContent' and 'initialContent'. Either include them or remove the dependency array. If 'setPreviewContent' needs the current value of 'initialContent', you can also switch to useReducer instead of useState and read 'initialContent' in the reducer  react-hooks/exhaustive-deps
+  116:29  warning  'data' is defined but never used                                                                                                                                                                                                                                                                                  @typescript-eslint/no-unused-vars
+
+E:\Projects\HireNova\app\lib\helper.tsx
+  1:44  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\Projects\HireNova\components\ui\header.tsx
+  1:45  warning  'SignUpButton' is defined but never used  @typescript-eslint/no-unused-vars
+
+E:\Projects\HireNova\hooks\use-fetch.ts
+  4:35  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\Projects\HireNova\lib\checkUser.tsx
+  23:15  warning  'newUser' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+E:\Projects\HireNova\types\html2pdf.d.ts
+  2:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+Γ£û 30 problems (15 errors, 15 warnings)
+

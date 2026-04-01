@@ -3,22 +3,15 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { format } from "date-fns";
 
-import {useEffect, useState} from "react";
 import { CartesianGrid, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { LineChart } from "recharts";
+
 const PerformanceChart = ({ assessments }: { assessments: any[] }) => {
 
-    const [chartData, setChartData] = useState<{ date: string; score: number }[]>([]);
-
-    useEffect(() => {
-        if(assessments) {
-            const formattedData = assessments.map(assessment => ({
-                date: format(new Date(assessment.createdAt), "MMM dd"),
-                score: assessment.quizScore
-            }));
-            setChartData(formattedData);
-        }
-    }, [assessments]);
+    const chartData = assessments ? assessments.map(assessment => ({
+        date: format(new Date(assessment.createdAt), "MMM dd"),
+        score: assessment.quizScore
+    })) : [];
     return (
         <Card className="border-muted-foreground/20 hover:shadow-md transition-all ease-in-out">
             <CardHeader>
