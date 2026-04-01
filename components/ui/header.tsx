@@ -6,6 +6,7 @@ import { ChevronDown, FileText, GraduationCap, LayoutDashboard, PenBox, StarsIco
 import { DropdownMenu } from "./dropdown-menu";
 import { DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./dropdown-menu";
 import { checkUser } from "@/lib/checkUser";
+import Logo from "@/components/Logo";
 
 const Header = async () => {
   await checkUser();
@@ -15,15 +16,8 @@ const Header = async () => {
       <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
 
         {/* LEFT SIDE */}
-        <Link href="/" className="flex items-center">
-          <Image
-            src="/logo1.png"
-            alt="Sensei Logo"
-            width={140}
-            height={40}
-            className="h-10 w-auto object-contain"
-            priority
-          />
+        <Link href="/">
+          <Logo />
         </Link>
 
         {/* RIGHT SIDE */}
