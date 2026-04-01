@@ -6,7 +6,7 @@ export const features = [
     title: "AI-Powered Career Guidance",
     description:
       "Get personalized career advice and insights powered by advanced AI technology.",
-    href: "/dashboard",
+    href: "/career-guidance",
   },
   {
     icon: <Briefcase className="w-10 h-10 mb-4 text-primary" />,
