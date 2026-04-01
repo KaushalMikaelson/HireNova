@@ -207,9 +207,9 @@ const DashboardView = ({ insights }: { insights: any }) => {
                                             return null;
                                         }} 
                                     />
-                                    <Bar dataKey="min" fill="hsl(var(--chart-1))" name="Minimum" radius={[4, 4, 0, 0]} barSize={20} />
-                                    <Bar dataKey="median" fill="hsl(var(--chart-2))" name="Median" radius={[4, 4, 0, 0]} barSize={20} />
-                                    <Bar dataKey="max" fill="hsl(var(--chart-3))" name="Maximum" radius={[4, 4, 0, 0]} barSize={20} />
+                                    <Bar dataKey="min" fill="#3b82f6" name="Minimum" radius={[4, 4, 0, 0]} barSize={20} />
+                                    <Bar dataKey="median" fill="#8b5cf6" name="Median" radius={[4, 4, 0, 0]} barSize={20} />
+                                    <Bar dataKey="max" fill="#ec4899" name="Maximum" radius={[4, 4, 0, 0]} barSize={20} />
                                 </BarChart>
                             </ResponsiveContainer>
                         </div>
