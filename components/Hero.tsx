@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import Image from "next/image";
 import { useRef, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { ChevronDown } from "lucide-react";
 
 export const HeroSection = () => {
     const imageRef = useRef<HTMLDivElement | null>(null);
@@ -73,16 +74,21 @@ export const HeroSection = () => {
                     variants={fadeUpVariants}
                     className="flex justify-center space-x-4 pt-6"
                 >
-                    <Link href="https://github.com/KaushalMikaelson">
+                    <Link href="/dashboard">
                         <Button size="lg" className="px-8 h-12 rounded-xl font-bold shadow-[0_0_40px_-10px_rgba(139,92,246,0.5)] hover:shadow-[0_0_60px_-15px_rgba(139,92,246,0.7)] hover:-translate-y-1 transition-all duration-300">
                             Get Started
                         </Button>
                     </Link>
-                    <Link href="https://github.com/KaushalMikaelson">
-                        <Button size="lg" className="px-8 h-12 rounded-xl font-bold border border-border/50 bg-background/50 backdrop-blur-xl shadow-sm hover:bg-muted/50 hover:shadow-md hover:-translate-y-1 transition-all duration-300" variant="outline">
-                            Learn More
-                        </Button>
-                    </Link>
+                    <Button
+                        size="lg"
+                        className="px-8 h-12 rounded-xl font-bold border border-border/50 bg-background/50 backdrop-blur-xl shadow-sm hover:bg-muted/50 hover:shadow-md hover:-translate-y-1 transition-all duration-300"
+                        variant="outline"
+                        onClick={() => {
+                            document.getElementById("features")?.scrollIntoView({ behavior: "smooth" });
+                        }}
+                    >
+                        Learn More <ChevronDown className="ml-1 h-4 w-4" />
+                    </Button>
                 </motion.div>
 
                 <motion.div

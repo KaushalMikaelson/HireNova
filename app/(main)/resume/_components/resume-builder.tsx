@@ -72,21 +72,14 @@ const ResumeBuilder = ({ initialContent }: { initialContent: string }) => {
     const getContactMarkdown = () => {
         const { contactInfo } = formValues;
         const parts = [];
-        if(contactInfo.email){
-            parts.push(`Email: ${contactInfo.email}`);
-        }
-        if(contactInfo.mobile){
-            parts.push(`Mobile: ${contactInfo.mobile}`);
-        }
-        if(contactInfo.linkedin){
-            parts.push(`LinkedIn: ${contactInfo.linkedin}`);
-        }
-        if(contactInfo.github){
-            parts.push(`GitHub: ${contactInfo.github}`);
-        }
-        return parts.length > 0 ? 
-        `## <div align="center"> ${user?.fullName || ""}</div>
-        \n\n<div align="center"> ${parts.join("\n")}</div>`: "";
+        if (contactInfo.email) parts.push(`📧 ${contactInfo.email}`);
+        if (contactInfo.mobile) parts.push(`📱 ${contactInfo.mobile}`);
+        if (contactInfo.linkedin) parts.push(`🔗 [LinkedIn](${contactInfo.linkedin})`);
+        if (contactInfo.github) parts.push(`💻 [GitHub](${contactInfo.github})`);
+
+        return parts.length > 0 
+            ? `# <div align="center">${user?.fullName || ""}</div>\n\n<div align="center">\n\n${parts.join(' &nbsp;|&nbsp; ')}\n\n</div>\n\n---`
+            : `# <div align="center">${user?.fullName || ""}</div>\n\n---`;
     }
 
     const getCombinedContent = () => {
@@ -141,31 +134,72 @@ const ResumeBuilder = ({ initialContent }: { initialContent: string }) => {
                 <html>
                 <head>
                     <meta charset="utf-8" />
-                    <title>Resume</title>
+                    <title>Resume - ${user?.fullName || "Resume"}</title>
                     <style>
+                        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
                         * { margin: 0; padding: 0; box-sizing: border-box; }
                         body {
-                            font-family: 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
-                            font-size: 14px;
-                            line-height: 1.6;
-                            color: #1a1a1a;
+                            font-family: 'Inter', 'Arial', sans-serif;
+                            font-size: 13px;
+                            line-height: 1.65;
+                            color: #1f2937;
                             background: #fff;
-                            padding: 30px 40px;
+                            padding: 36px 48px;
+                            max-width: 860px;
+                            margin: 0 auto;
                         }
-                        h1 { font-size: 26px; font-weight: 700; margin-bottom: 4px; color: #111; }
-                        h2 { font-size: 16px; font-weight: 700; margin-top: 18px; margin-bottom: 6px; color: #222; border-bottom: 1.5px solid #ccc; padding-bottom: 4px; text-transform: uppercase; letter-spacing: 0.04em; }
-                        h3 { font-size: 14px; font-weight: 600; margin-top: 10px; margin-bottom: 2px; color: #333; }
-                        p { margin-bottom: 6px; color: #333; }
-                        ul { padding-left: 20px; margin-bottom: 6px; }
-                        li { margin-bottom: 3px; color: #333; }
-                        a { color: #2563eb; text-decoration: none; }
-                        strong { font-weight: 600; }
-                        em { font-style: italic; }
-                        hr { border: none; border-top: 1px solid #e5e5e5; margin: 14px 0; }
+                        h1 {
+                            font-size: 30px;
+                            font-weight: 700;
+                            color: #111827;
+                            letter-spacing: -0.5px;
+                            margin-bottom: 6px;
+                        }
+                        h2 {
+                            font-size: 11px;
+                            font-weight: 700;
+                            color: #4f46e5;
+                            text-transform: uppercase;
+                            letter-spacing: 1.2px;
+                            margin-top: 22px;
+                            margin-bottom: 8px;
+                            padding-bottom: 5px;
+                            border-bottom: 2px solid #e5e7eb;
+                        }
+                        h3 {
+                            font-size: 14px;
+                            font-weight: 600;
+                            color: #111827;
+                            margin-top: 12px;
+                            margin-bottom: 1px;
+                        }
+                        p { margin-bottom: 5px; color: #374151; }
+                        ul { padding-left: 18px; margin: 4px 0 8px; }
+                        li { margin-bottom: 3px; color: #374151; }
+                        a { color: #4f46e5; text-decoration: none; }
+                        strong { font-weight: 600; color: #111; }
+                        em { font-style: italic; color: #6b7280; font-size: 12px; }
+                        hr {
+                            border: none;
+                            border-top: 2px solid #e5e7eb;
+                            margin: 10px 0 16px;
+                        }
                         div[align="center"] { text-align: center; }
+                        div[align="center"] p,
+                        div[align="center"] > * {
+                            font-size: 12px;
+                            color: #6b7280;
+                        }
+                        .section-entry {
+                            margin-bottom: 12px;
+                            padding-bottom: 10px;
+                            border-bottom: 1px solid #f3f4f6;
+                        }
+                        .section-entry:last-child { border-bottom: none; }
                         @media print {
                             body { padding: 0; }
-                            @page { margin: 15mm 20mm; size: A4; }
+                            @page { margin: 12mm 18mm; size: A4 portrait; }
+                            h2 { page-break-after: avoid; }
                         }
                     </style>
                 </head>
@@ -472,50 +506,58 @@ const ResumeBuilder = ({ initialContent }: { initialContent: string }) => {
                 </TabsContent>
 
                 <TabsContent value="preview">
-                    <Button variant="link" type="button" className="mb-2"
-                    onClick={() => setResumeMode(resumeMode === "preview" ? "edit" : "preview")}
-                    >
-                        {resumeMode === "preview" ? (
-                            <>
-                            <Edit className="h-4 w-4 mr-2" />
-                            Edit Resume
-                            </>
+                    <div className="flex items-center justify-between mb-4">
+                        <Button variant="outline" size="sm" className="gap-2"
+                            onClick={() => setResumeMode(resumeMode === "preview" ? "edit" : "preview")}
+                        >
+                            {resumeMode === "preview" ? (
+                                <><Edit className="h-4 w-4" /> Edit Markdown</>
+                            ) : (
+                                <><Monitor className="h-4 w-4" /> Preview Resume</>
+                            )}
+                        </Button>
 
-                        ) : (
-                            <>
-                            <Monitor className="h-4 w-4 mr-2" />
-                            Preview Resume
-                            </>
+                        {resumeMode !== "preview" && (
+                            <div className="flex items-center gap-2 bg-amber-500/10 text-amber-600 border border-amber-500/20 rounded-lg px-3 py-1.5 text-xs font-medium">
+                                <AlertTriangle className="h-3.5 w-3.5" />
+                                Changes in markdown won&apos;t sync back to the form
+                            </div>
                         )}
-                    </Button>
+                    </div>
 
-                    {resumeMode != "preview" && (
-                        <div className="flex p -3 gap-2 items-center border-2 ">
-                            <AlertTriangle className="h-4 w-4 mr-2" />
-                            <span className="text-muted-foreground text-xs mt-0.5">
-                                You will lose edited markdown if you switch to preview mode.
-                            </span>
+                    {resumeMode === "edit" ? (
+                        <div className="rounded-xl overflow-hidden border border-border/50">
+                            <MDEditor
+                                value={previewContent}
+                                onChange={(val) => setPreviewContent(val || "")}
+                                height={750}
+                                preview="edit"
+                                hideToolbar={false}
+                            />
+                        </div>
+                    ) : (
+                        /* A4-style preview card */
+                        <div className="flex justify-center">
+                            <div className="w-full max-w-[860px] bg-white text-gray-900 shadow-2xl rounded-xl overflow-hidden" style={{ minHeight: "1100px" }}>
+                                {/* Resume header strip */}
+                                <div className="h-1.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" />
+                                <div className="p-10">
+                                    <MDEditor.Markdown
+                                        source={previewContent}
+                                        style={{ background: "transparent", color: "#111827" }}
+                                        className="prose prose-sm max-w-none"
+                                    />
+                                </div>
+                            </div>
                         </div>
                     )}
 
-                    <div className="border-t border-border/50 pt-2">
-                        <MDEditor
-                            value={previewContent}
-                            onChange={(val) => setPreviewContent(val || "")}
-                            height={800}
-                            preview={resumeMode}
-                            />
-                    </div>
-
-                    <div className="absolute left-[-9999px] top-0 w-[800px]">
-                        <div id="resume-pdf" className="p-8 bg-white text-black">
+                    {/* Hidden off-screen element for PDF generation */}
+                    <div className="absolute left-[-9999px] top-0 w-[860px]">
+                        <div id="resume-pdf" className="p-10 bg-white text-gray-900">
                             <MDEditor.Markdown
                                 source={previewContent}
-                                style={{
-                                    background: "white",
-                                    color: "black",
-                                    fontFamily: "sans-serif",
-                                }}
+                                style={{ background: "white", color: "#111827" }}
                             />
                         </div>
                     </div>

@@ -18,7 +18,7 @@ export default function Home() {
     <div>
       <div className="grid-background"></div>
       <HeroSection />
-      <section className="w-full py-20 md:py-24 lg:py-32 bg-background">
+      <section id="features" className="w-full py-20 md:py-24 lg:py-32 bg-background">
         <div className="container mx-auto px-4 md:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-center md:text-4xl lg:text-5xl xl:text-6xl gradient-title mb-8">
             Powerful Features for Your Career Growth
@@ -33,19 +33,24 @@ export default function Home() {
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
-                  <Card
-                    className="h-full border border-border/50 bg-background/50 backdrop-blur-sm hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300 group"
-                  >
-                    <CardContent className="p-6 text-center flex flex-col items-center h-full justify-center" >
-                      <div className="flex flex-col items-center justify-center">
-                        <div className="mb-4 p-3 rounded-2xl bg-primary/5 text-primary group-hover:bg-primary/10 group-hover:scale-110 transition-all duration-300">
-                          {feature.icon}
+                  <Link href={feature.href} className="block h-full">
+                    <Card
+                      className="h-full border border-border/50 bg-background/50 backdrop-blur-sm hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300 group cursor-pointer"
+                    >
+                      <CardContent className="p-6 text-center flex flex-col items-center h-full justify-center" >
+                        <div className="flex flex-col items-center justify-center">
+                          <div className="mb-4 p-3 rounded-2xl bg-primary/5 text-primary group-hover:bg-primary/10 group-hover:scale-110 transition-all duration-300">
+                            {feature.icon}
+                          </div>
+                          <h3 className="text-xl font-bold tracking-tight mb-2 text-foreground/90">{feature.title}</h3>
+                          <p className="text-muted-foreground/80 font-medium leading-relaxed">{feature.description}</p>
+                          <span className="mt-4 flex items-center gap-1 text-primary text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            Explore <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+                          </span>
                         </div>
-                        <h3 className="text-xl font-bold tracking-tight mb-2 text-foreground/90">{feature.title}</h3>
-                        <p className="text-muted-foreground/80 font-medium leading-relaxed">{feature.description}</p>
-                      </div>
-                    </CardContent>
-                  </Card>
+                      </CardContent>
+                    </Card>
+                  </Link>
                 </motion.div>
               );
             })}
