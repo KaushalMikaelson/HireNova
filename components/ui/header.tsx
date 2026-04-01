@@ -60,7 +60,12 @@ const Header = async () => {
                     <span> Interview Prep </span>
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>Subscription</DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/subscription" className="flex items-center gap-2 cursor-pointer w-full">
+                    <StarsIcon className="h-4 w-4" />
+                    <span> Subscription </span>
+                  </Link>
+                </DropdownMenuItem>
 
               </DropdownMenuContent>
             </DropdownMenu>
