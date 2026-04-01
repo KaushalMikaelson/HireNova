@@ -123,27 +123,75 @@ const ResumeBuilder = ({ initialContent }: { initialContent: string }) => {
 
     const generatePDF = async () => {
         setIsGenerating(true);
-        try{
+        try {
             const element = document.getElementById("resume-pdf");
-            if(!element) return;
-
-            const opt = {
-                margin: [15, 15],
-                filename: "resume.pdf",
-                image: {type: "jpeg", quality: 0.98},
-                html2canvas: {scale: 2},
-                jsPDF: {unit: "mm", format: "a4", orientation: "portrait"}
+            if (!element) {
+                toast.error("Could not find resume content.");
+                return;
             }
 
-            const html2pdf = (await import("html2pdf.js/dist/html2pdf.min.js")).default;
-            await html2pdf().set(opt).from(element).save();
-            
-        }catch(error){
+            const printWindow = window.open("", "_blank", "width=900,height=700");
+            if (!printWindow) {
+                toast.error("Popup blocked. Please allow popups for this site.");
+                return;
+            }
+
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="utf-8" />
+                    <title>Resume</title>
+                    <style>
+                        * { margin: 0; padding: 0; box-sizing: border-box; }
+                        body {
+                            font-family: 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
+                            font-size: 14px;
+                            line-height: 1.6;
+                            color: #1a1a1a;
+                            background: #fff;
+                            padding: 30px 40px;
+                        }
+                        h1 { font-size: 26px; font-weight: 700; margin-bottom: 4px; color: #111; }
+                        h2 { font-size: 16px; font-weight: 700; margin-top: 18px; margin-bottom: 6px; color: #222; border-bottom: 1.5px solid #ccc; padding-bottom: 4px; text-transform: uppercase; letter-spacing: 0.04em; }
+                        h3 { font-size: 14px; font-weight: 600; margin-top: 10px; margin-bottom: 2px; color: #333; }
+                        p { margin-bottom: 6px; color: #333; }
+                        ul { padding-left: 20px; margin-bottom: 6px; }
+                        li { margin-bottom: 3px; color: #333; }
+                        a { color: #2563eb; text-decoration: none; }
+                        strong { font-weight: 600; }
+                        em { font-style: italic; }
+                        hr { border: none; border-top: 1px solid #e5e5e5; margin: 14px 0; }
+                        div[align="center"] { text-align: center; }
+                        @media print {
+                            body { padding: 0; }
+                            @page { margin: 15mm 20mm; size: A4; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    ${element.innerHTML}
+                </body>
+                </html>
+            `);
+
+            printWindow.document.close();
+
+            printWindow.onload = () => {
+                setTimeout(() => {
+                    printWindow.focus();
+                    printWindow.print();
+                    printWindow.close();
+                    toast.success("PDF generated! Save it from the print dialog.");
+                }, 300);
+            };
+
+        } catch (error) {
             console.error("Error generating PDF:", error);
-        }finally{
+            toast.error("Failed to generate PDF.");
+        } finally {
             setIsGenerating(false);
         }
-        
     }
 
     return (
@@ -459,17 +507,17 @@ const ResumeBuilder = ({ initialContent }: { initialContent: string }) => {
                             />
                     </div>
 
-                    <div className="hidden" >
-                    <div id="resume-pdf">
-                        <MDEditor.Markdown
-                            source={previewContent}
-                            style={{
-                                background: "white",
-                                color: "black",
-                            }}
+                    <div className="absolute left-[-9999px] top-0 w-[800px]">
+                        <div id="resume-pdf" className="p-8 bg-white text-black">
+                            <MDEditor.Markdown
+                                source={previewContent}
+                                style={{
+                                    background: "white",
+                                    color: "black",
+                                    fontFamily: "sans-serif",
+                                }}
                             />
-                    </div>
-
+                        </div>
                     </div>
                 </TabsContent>
             </Tabs>
