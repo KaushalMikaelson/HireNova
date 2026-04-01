@@ -8,6 +8,8 @@ import React from "react";
 import { format, formatDistanceToNow } from "date-fns";
 import { Progress } from "@/components/ui/progress";
 import { motion } from "framer-motion";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -74,10 +76,17 @@ const DashboardView = ({ insights }: { insights: any }) => {
                     </h1>
                     <p className="text-muted-foreground mt-1">Data-driven analysis tailored for {insights.industry || "your industry"}</p>
                 </div>
-                <Badge variant="outline" className="px-3 py-1 font-medium bg-background/50 backdrop-blur-sm border-primary/20 text-primary">
-                    <Activity className="w-3 h-3 mr-2 inline-block animate-pulse" />
-                    Last updated: {lastUpdatedDate}
-                </Badge>
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                    <Link href="/onboarding?force=true">
+                        <Button variant="outline" className="border-primary/20 bg-background/50 backdrop-blur-sm">
+                            Update Profile
+                        </Button>
+                    </Link>
+                    <Badge variant="outline" className="px-3 py-1 font-medium bg-background/50 backdrop-blur-sm border-primary/20 text-primary hidden lg:inline-flex">
+                        <Activity className="w-3 h-3 mr-2 animate-pulse" />
+                        Last updated: {lastUpdatedDate}
+                    </Badge>
+                </div>
             </motion.div>
 
             {/* Top 4 stat cards */}
