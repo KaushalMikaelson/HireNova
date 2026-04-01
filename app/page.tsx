@@ -115,22 +115,31 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.5, delay: index * 0.15 }}
-                className="flex flex-col items-center text-center space-y-5 group"
               >
-                {/* Icon Circle */}
-                <div className="w-16 h-16 rounded-2xl bg-background border border-border shadow-sm flex items-center justify-center text-primary group-hover:border-primary/40 group-hover:shadow-md transition-all duration-300 group-hover:-translate-y-1">
-                  {item.icon}
-                </div>
+                <Link href={item.href} className="block h-full cursor-pointer">
+                  <Card className="h-full border border-border/50 bg-background/50 backdrop-blur-sm hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300 group">
+                    <CardContent className="p-6 text-center flex flex-col items-center h-full justify-center space-y-5">
+                      {/* Icon Circle */}
+                      <div className="w-16 h-16 rounded-2xl bg-background border border-border shadow-sm flex items-center justify-center text-primary group-hover:border-primary/40 group-hover:shadow-md transition-all duration-300 group-hover:-translate-y-1 mx-auto group-hover:bg-primary/5 group-hover:scale-110">
+                        {item.icon}
+                      </div>
 
-                {/* Title */}
-                <h3 className="text-xl font-bold tracking-tight text-foreground/90">
-                  {item.title}
-                </h3>
+                      {/* Title */}
+                      <h3 className="text-xl font-bold tracking-tight text-foreground/90">
+                        {item.title}
+                      </h3>
 
-                {/* Description */}
-                <p className="text-muted-foreground/80 font-medium leading-relaxed">
-                  {item.description}
-                </p>
+                      {/* Description */}
+                      <p className="text-muted-foreground/80 font-medium leading-relaxed">
+                        {item.description}
+                      </p>
+
+                      <span className="mt-4 flex items-center justify-center gap-1 text-primary text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300 w-full">
+                        Explore <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+                      </span>
+                    </CardContent>
+                  </Card>
+                </Link>
               </motion.div>
             ))}
           </div>
